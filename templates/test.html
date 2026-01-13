@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <table border="1" id="data-table">
+        <thead>
+            <tr>
+                <th>Meter ID</th>
+                <th>Real Power</th>
+                <th>Apparent Power</th>
+                <th>Power Factor</th>
+                <th>Supply Voltage</th>
+                <th>LRMS1_1</th>
+                <th>Accumulated Power</th>
+                <th>Accumulated Minutes</th>
+                <th>Accumulated Seconds</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        function updateTable(data) {
+            let tbody = $('#data-table tbody');
+            tbody.empty();
+            data.forEach(item => {
+                let row = `<tr>
+                    <td>${item[0]}</td>
+                    <td>${item[1]}</td>
+                    <td>${item[2]}</td>
+                    <td>${item[3]}</td>
+                    <td>${item[4]}</td>
+                    <td>${item[5]}</td>
+                    <td>${item[6]}</td>
+                    <td>${item[7]}</td>
+                    <td>${item[8]}</td>
+                </tr>`;
+                tbody.append(row);
+            });
+        }
+
+        function fetchData() {
+            $.get('/data', function(response) {
+                updateTable(response);
+            });
+        }
+
+        $(document).ready(function() {
+            fetchData();
+            setInterval(fetchData, 3000);
+        });
+    </script>
+</body>
+</html>

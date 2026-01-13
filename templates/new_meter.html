@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}Readings{% endblock %}
+
+{% block content %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+  <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="col-xl">
+            
+            <div class="card mb-4">
+                <a href="{{ url_for('meters') }}" class="btn btn-link mb-2 mt-3">&larr; Back to Feeders</a>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Add Feeder</h5>
+                <small class="text-muted float-end">New Feeder Registration</small>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="mb-3">
+                    <form action="{{ ('/new_meter') }}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="meter-number">Meter Number</label>
+                            <input type="text" name="meter_number" class="form-control" id="meter-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="meter-name">Feeder Name</label>
+                            <input type="text" name="feeder_name" class="form-control" id="meter-name" required>
+                        </div>
+                        <div class="mb-3">  
+                            <label for="sim-number" class="form-label">SIM Number</label>
+                            <input type="text" name="sim_card_number" class="form-control" id="sim-number" required>
+                        </div>
+                        <div class="mb-3"> 
+                            <label class="form-label" for="location">Location</label>
+                            <input type="text" name="location" class="form-control" id="location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="transmission-station">Distribution Substation</label>
+                            <input type="text" name="distribution_substation" class="form-control" id="transmission-station" placeholder="e.g., ZARIA ROAD TS" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="feeder-33">Service Center</label>
+                            <input type="text" name="service_center" class="form-control" id="feeder-33" placeholder="e.g., JUTH" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="injection-substation">Business Unit</label>
+                            <input type="text" name="business_unit" class="form-control" id="injection-substation" placeholder="-">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="feeder-11">Region</label>
+                            <input type="text" name="region" class="form-control" id="feeder-11" placeholder="-">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ia">Transformer Rating</label>
+                            <input type="text" name="transformer_rating" step="0.01" class="form-control" id="ia" placeholder="e.g., 11kv" required>
+                        </div>
+                         <div class="mb-3">
+                            <label class="form-label" for="band">Band</label>
+                            <select class="form-select" name="band" id="band" required>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="lifeline">Lifeline</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                    </div>
+                </div>
+            </div>    </div>
+ <!-- / Content -->
+
+</div>
+<!-- Content wrapper -->
+{% endblock %}

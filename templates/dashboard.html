@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+{% block title %}Readings{% endblock %}
+
+{% block content %}
+
+<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
+    <div class="card bg-success">
+        <div class="card-body">
+
+            <span class="fw-bold d-block mb-1">Online</span>
+            <h3 class="card-title text-white text-nowrap mb-2" id="non-zero-count"> </h3>
+            <small class="text-white fw-bold"><i class="bx bx-up-arrow-alt"></i> .</small>
+        </div>
+    </div>
+</div>
+<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
+    <div class="card bg-danger">
+    <div class="card-body">
+
+        <span class="fw-bold d-block mb-1">Offline</span>
+        <h3 class="card-title text-white text-nowrap mb-2" id="zero-count"> </h3>
+        <small class="text-white fw-bold"><i class="bx bx-down-arrow-alt"></i> .</small>
+    </div>
+    </div>
+</div>
+<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
+  <div class="card bg-warning">
+    <div class="card-body">
+
+        <span class="fw-bold d-block mb-1">Total Energy </span>
+        <h3 class="card-title text-white text-nowrap mb-2" id="total-energy"> </h3>
+        <small class="text-white fw-bold">
+          <i class="bx bx-bulb"></i>
+          <span id="current-month"></span>
+        </small>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const monthNames = [
+              "January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"
+            ];
+            const now = new Date();
+            document.getElementById('current-month').textContent = monthNames[now.getMonth()] + " " + now.getFullYear();
+          });
+        </script>
+    </div>
+  </div>
+</div>
+<div class="col-md-3 col-xs-12 col-sm-12 mb-4">
+  <div class="card bg-secondary">
+    <div class="card-body">
+
+      <span class="fw-bold d-block mb-1">Compliance</span>
+      <h3 class="card-title text-white text-nowrap mb-2" id="feeder-compliance"> </h3>
+      <small class="text-white fw-bold"><i class="bx bx-chart"></i> 24 Hours</small>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+  <!-- Responsive Table -->
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header d-flex justify-content-between align-items-center">
+          Feeders
+          <!-- <a href="{{ 'download_csv' }}" title="Download CSV"><small>Download CSV<i class="bx bx-file"></i> </small></a> -->
+      </h5>
+      <div class="table-responsive text-nowrap">
+        <table class="table" id="data-table">
+            <thead>
+            <tr class="text-nowrap">
+                
+                <th>Feeder Name</th>
+                <th>Feeder Clock</th>
+                <th>Status</th>
+                <th>Last Reading </th>
+                <th>Band</th>
+                <th>Rating</th>
+                <th>&nbsp;</th>
+                <!-- <th>Active Energy Import</th>
+                <th>Instantaneous Active Power</th>
+                <th>Instantaneous Voltage </th>
+                <th>Instantaneous Current </th>
+                <th>Reactive Energy </th>
+                <th>Power Factor</th> -->
+
+            </tr>
+            <tr>
+                
+                <th></th>
+                <th><small class="text-muted">Last Communication</small></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>&nbsp;</th>
+                <!-- <th><small class="text-muted">(kWh)</small></th>
+                <th><small class="text-muted">(kW)</small></th>
+                <th><small class="text-muted">L1,L2,L3 (V)</small></th>
+                <th><small class="text-muted">L1,L2,L3 (A)</small></th>
+                <th><small class="text-muted">(Kvah)</small></th>
+                <th></th> -->
+            </thead>
+            <tbody>
+            <!-- <tr class="table-success">
+                <th scope="row">#</th>
+                <td>11kv - Zaria Road </td>
+                <td>
+                    <span class="badge bg-label-primary me-1">In</span>
+
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr class="table-danger">
+                <th scope="row">#</th>
+                <td>11kv - Bauchi Road</td>
+                <td>
+
+                    <span class="badge bg-label-primary me-1">Out</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr> -->
+
+            </tbody>
+        </table>
+        <hr>
+        <small class="text-muted mt-3">&nbsp; Note:</small> <br>
+        <small class="text-muted mt-3">&nbsp; 1. Data updates every 1 minute</small> <br>
+        <small class="text-muted mt-3">&nbsp; 2. A feeder is considered offline if no reading is received for more than 10 minutes</small>
+        <hr>
+      </div>
+    </div>
+  </div>
+  <!-- /Responsive Table -->
+</div>
+
+
+
+{% endblock %}

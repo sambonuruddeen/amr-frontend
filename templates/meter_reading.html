@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}Readings{% endblock %}
+
+{% block content %}
+<div class="card mb-3">
+      <div class="card-body">
+        <form action="{{ reports }}" method="post"><div class="row">
+          
+          <div class="col-md-4 col-xs-12 col-sm-12">
+            <div class="input-group">
+              <button class="btn btn-outline-primary" type="button">Feeder</button>
+              <select name="feeder_name" class="form-select" id="inputGroupSelect03" required>
+                <option value="">Choose...</option>
+                {% for number, name in feeders %}
+                <option value="{{ number }}" {% if name == selected %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-xs-12 col-sm-12">
+            <div class="input-group">
+              <button class="btn btn-outline-primary" type="button">From</button>
+              <input class="form-control" name="start_date" type="date" value="{{ yesterday_date }}" id="html5-date-input" required>
+            </div>
+          </div>
+          <div class="col-md-3 col-xs-12 col-sm-12">
+            <div class="input-group">
+              <button class="btn btn-outline-primary" type="button">To</button>
+              <input class="form-control" name="end_date" type="date" value="{{ today_date }}" id="html5-date-input" required>
+            </div>
+          </div>
+          
+          <div class="col-md-2 col-xs-12 col-sm-12">
+            <div class="input-group">
+              <button class="btn btn-primary" type="submit">Generate</button>
+            </div>
+          </div> 
+          
+        </div></form>
+
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+
+      </div>
+    </div>
+        
+                <div class="card">
+                    <h5 class="card-header">Feeder Logs: <code>{{ feeder_name }}</code></h5>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                          <table class="table table-hover table-stripped" id="table">
+                            <thead>
+                              <tr class="text-nowrap">
+                                    <th>#</th>
+                                    <th>Feeder Name</th>
+                                    <th>Feeder Clock</th>
+                                    <th>Status</th>
+                                    <th>Last Reading </th>
+                                    <th>Active Energy Import</th>
+                                    <th>Instantaneous Active Power</th>
+                                    <th>Intantaneous Voltage </th>
+                                    <th>Instantaneous Current </th>
+                                    <th>Reactive Energy </th>
+                                    <th>Power Factor</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for row in report %}
+                                <tr>
+                                    <th>{{ row[0] }}</th>
+                                    <td>{{ row[2] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[3] }}</td>
+                                    <td>{{ row[4] }}</td>
+                                    <td>{{ row[5] }}</td>
+                                    <td>{{ row[6] }}</td>
+                                    <td>{{ row[7] }}</td>
+                                    <td>{{ row[8] }}</td>
+                                    <td>{{ row[9] }}</td>
+                                    <td>{{ row[10] }}</td>
+                                </tr>
+                      
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        
+                        </div> 
+                    </div> 
+
+                </div>
+                
+{% endblock %}
