@@ -4,106 +4,110 @@
 {% block content %}
 
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <form action="{{ search }}" method="post">
-        <div class="row">             
-          <!-- <div class="col-md-2 col-xs-12 col-sm-12"></div> -->
-          <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="input-group">
-              <button class="btn btn-outline-primary" type="button">From</button>
-              <input class="form-control" name="start_date" type="date" value="{{ yesterday_date }}" id="html5-date-input" required>
-            </div>
+<div class="card mb-3">
+  <div class="card-body">
+    <form action="{{ search }}" method="post">
+      <div class="row">
+        <!-- <div class="col-md-2 col-xs-12 col-sm-12"></div> -->
+        <div class="col-md-4 col-xs-12 col-sm-12">
+          <div class="input-group">
+            <button class="btn btn-outline-primary" type="button">From</button>
+            <input class="form-control" name="start_date" type="date" value="{{ yesterday_date }}" id="html5-date-input"
+              required>
           </div>
-          <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="input-group">
-              <button class="btn btn-outline-primary" type="button">To</button>
-              <input class="form-control" name="end_date" type="date" value="{{ today_date }}" id="html5-date-input" required>
-            </div>
+        </div>
+        <div class="col-md-4 col-xs-12 col-sm-12">
+          <div class="input-group">
+            <button class="btn btn-outline-primary" type="button">To</button>
+            <input class="form-control" name="end_date" type="date" value="{{ today_date }}" id="html5-date-input"
+              required>
           </div>
-                     
-          <div class="col-md-3 col-xs-12 col-sm-12">
-            <div class="input-group">
-              <button class="btn btn-primary" type="submit">Generate Report</button>
-            </div>
-          </div> 
-          
-        </div> 
-      </form>
-    </div>   
+        </div>
+
+        <div class="col-md-3 col-xs-12 col-sm-12">
+          <div class="input-group">
+            <button class="btn btn-primary" type="submit">Generate Report</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
   </div>
+</div>
 
-  <div class="card">
-    <h5 class="card-header">Meter Readings Log
-      {% if report|length > 0 %}
-      <a class="float-end" href="{{ url_for('download_csv', start_date=start, end_date=end)}}" title="Download CSV"> <button class="btn btn-outline-primary">Download <i class="bx bx-file"></i></button></a>
-      {% else %}
-      <a class="float-end" href="#" title="Download CSV"> <button class="btn btn-outline-primary" disabled>Download <i class="bx bx-file"></i></button></a>
-      {% endif %}
-    </h5>
-    
-    <div class="card-body">
-      <div class="table-responsive text-nowrap">
-        <table class="table table-hover table-stripped" id="table">
-          <thead>
-            <tr class="text-nowrap">
-              <th>#</th>
-              <th>Region</th>
-              <th>Business Unit</th>
-              <th>Service Center</th>
-              <th>Feeder Name</th>
-              <th>Meter Number</th>
-              <th>Sim Number</th>
-              <th>Location</th>
-              <th>Band</th>
-              <th>Transformer Rating</th>
-              <th>Distribution Substation</th>
-              <th>Service Center</th>
-              <th>Business Unit</th>
-              <th>Region</th>
-              <th>Feeder Clock</th>
-              <th>Active Energy Import</th>
-              <th>Active Energy Export</th>
-              <th>Reactive Energy Import</th>
-              <th>Reactive Energy Export</th>
-              <th>Power Factor</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in report %}
-            <tr>
-              <td>{{ loop.index }}</td>
-              <td>{{ row.region }}</td>
-              <td>{{ row.business_unit }}</td>
-              <td>{{ row.service_center }}</td>
-              <td>{{ row.feeder_name }}</td>
-              <td>{{ row.meter_number }}</td>
-              <td>{{ row.sim_card_number }}</td>
-              <td>{{ row.location }}</td>
-              <td>{{ row.band }}</td>
-              <td>{{ row.transformer_rating }}</td>
-              <td>{{ row.distribution_substation }}</td>
-              <td>{{ row.service_center }}</td>
-              <td>{{ row.business_unit }}</td>
-              <td>{{ row.region }}</td>
-              <td>{{ row.clock }}</td>
-              <td>{{ row.active_energy_import }}</td>
-              <td>{{ row.active_energy_export }}</td>
-              <td>{{ row.reactive_energy_import }}</td>
-              <td>{{ row.reactive_energy_export }}</td>
-              <td>{{ row.power_factor }}</td>
-              <td>{{ row.timestamp }}</td>
+<div class="card">
+  <h5 class="card-header">Meter Readings Log
+    {% if report|length > 0 %}
+    <a class="float-end" href="{{ url_for('download_csv', start_date=start, end_date=end)}}" title="Download CSV">
+      <button class="btn btn-outline-primary">Download <i class="bx bx-file"></i></button></a>
+    {% else %}
+    <a class="float-end" href="#" title="Download CSV"> <button class="btn btn-outline-primary" disabled>Download <i
+          class="bx bx-file"></i></button></a>
+    {% endif %}
+  </h5>
 
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        
-      </div> 
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover" id="table">
+        <thead>
+          <tr class="text-nowrap">
+            <th>#</th>
+            <th>Region</th>
+            <th>Business Unit</th>
+            <th>Service Center</th>
+            <th>Feeder Name</th>
+            <th>Meter Number</th>
+            <th>Sim Number</th>
+            <th>Location</th>
+            <th>Band</th>
+            <th>Transformer Rating</th>
+            <th>Distribution Substation</th>
+            <th>Service Center</th>
+            <th>Business Unit</th>
+            <th>Region</th>
+            <th>Feeder Clock</th>
+            <th>Active Energy Import</th>
+            <th>Active Energy Export</th>
+            <th>Reactive Energy Import</th>
+            <th>Reactive Energy Export</th>
+            <th>Power Factor</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in report %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.business_unit }}</td>
+            <td>{{ row.service_center }}</td>
+            <td>{{ row.feeder_name }}</td>
+            <td>{{ row.meter_number }}</td>
+            <td>{{ row.sim_card_number }}</td>
+            <td>{{ row.location }}</td>
+            <td>{{ row.band }}</td>
+            <td>{{ row.transformer_rating }}</td>
+            <td>{{ row.distribution_substation }}</td>
+            <td>{{ row.service_center }}</td>
+            <td>{{ row.business_unit }}</td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.clock }}</td>
+            <td>{{ row.active_energy_import }}</td>
+            <td>{{ row.active_energy_export }}</td>
+            <td>{{ row.reactive_energy_import }}</td>
+            <td>{{ row.reactive_energy_export }}</td>
+            <td>{{ row.power_factor }}</td>
+            <td>{{ row.timestamp }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
     </div>
-
   </div>
+
+</div>
 
 
 

@@ -1,145 +1,200 @@
 {% extends "layout.html" %}
-{% block title %}Readings{% endblock %}
+{% block title %}Dashboard | Horizon AMR{% endblock %}
 
 {% block content %}
-
-<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
-    <div class="card bg-success">
-        <div class="card-body">
-
-            <span class="fw-bold d-block mb-1">Online</span>
-            <h3 class="card-title text-white text-nowrap mb-2" id="non-zero-count"> </h3>
-            <small class="text-white fw-bold"><i class="bx bx-up-arrow-alt"></i> .</small>
-        </div>
-    </div>
-</div>
-<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
-    <div class="card bg-danger">
-    <div class="card-body">
-
-        <span class="fw-bold d-block mb-1">Offline</span>
-        <h3 class="card-title text-white text-nowrap mb-2" id="zero-count"> </h3>
-        <small class="text-white fw-bold"><i class="bx bx-down-arrow-alt"></i> .</small>
-    </div>
-    </div>
-</div>
-<div class="col-md-3  col-xs-12 col-sm-12 mb-4">
-  <div class="card bg-warning">
-    <div class="card-body">
-
-        <span class="fw-bold d-block mb-1">Total Energy </span>
-        <h3 class="card-title text-white text-nowrap mb-2" id="total-energy"> </h3>
-        <small class="text-white fw-bold">
-          <i class="bx bx-bulb"></i>
-          <span id="current-month"></span>
-        </small>
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const monthNames = [
-              "January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-            ];
-            const now = new Date();
-            document.getElementById('current-month').textContent = monthNames[now.getMonth()] + " " + now.getFullYear();
-          });
-        </script>
-    </div>
-  </div>
-</div>
-<div class="col-md-3 col-xs-12 col-sm-12 mb-4">
-  <div class="card bg-secondary">
-    <div class="card-body">
-
-      <span class="fw-bold d-block mb-1">Compliance</span>
-      <h3 class="card-title text-white text-nowrap mb-2" id="feeder-compliance"> </h3>
-      <small class="text-white fw-bold"><i class="bx bx-chart"></i> 24 Hours</small>
-    </div>
-    </div>
-  </div>
-
-</div>
-
 <div class="row">
-  <!-- Responsive Table -->
-  <div class="col-md-12">
-    <div class="card">
-      <h5 class="card-header d-flex justify-content-between align-items-center">
-          Feeders
-          <!-- <a href="{{ 'download_csv' }}" title="Download CSV"><small>Download CSV<i class="bx bx-file"></i> </small></a> -->
-      </h5>
-      <div class="table-responsive text-nowrap">
-        <table class="table" id="data-table">
-            <thead>
-            <tr class="text-nowrap">
-                
-                <th>Feeder Name</th>
-                <th>Feeder Clock</th>
-                <th>Status</th>
-                <th>Last Reading </th>
-                <th>Band</th>
-                <th>Rating</th>
-                <th>&nbsp;</th>
-                <!-- <th>Active Energy Import</th>
-                <th>Instantaneous Active Power</th>
-                <th>Instantaneous Voltage </th>
-                <th>Instantaneous Current </th>
-                <th>Reactive Energy </th>
-                <th>Power Factor</th> -->
-
-            </tr>
-            <tr>
-                
-                <th></th>
-                <th><small class="text-muted">Last Communication</small></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>&nbsp;</th>
-                <!-- <th><small class="text-muted">(kWh)</small></th>
-                <th><small class="text-muted">(kW)</small></th>
-                <th><small class="text-muted">L1,L2,L3 (V)</small></th>
-                <th><small class="text-muted">L1,L2,L3 (A)</small></th>
-                <th><small class="text-muted">(Kvah)</small></th>
-                <th></th> -->
-            </thead>
-            <tbody>
-            <!-- <tr class="table-success">
-                <th scope="row">#</th>
-                <td>11kv - Zaria Road </td>
-                <td>
-                    <span class="badge bg-label-primary me-1">In</span>
-
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="table-danger">
-                <th scope="row">#</th>
-                <td>11kv - Bauchi Road</td>
-                <td>
-
-                    <span class="badge bg-label-primary me-1">Out</span>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr> -->
-
-            </tbody>
-        </table>
-        <hr>
-        <small class="text-muted mt-3">&nbsp; Note:</small> <br>
-        <small class="text-muted mt-3">&nbsp; 1. Data updates every 1 minute</small> <br>
-        <small class="text-muted mt-3">&nbsp; 2. A feeder is considered offline if no reading is received for more than 10 minutes</small>
-        <hr>
+  <!-- Key Metrics -->
+  <div class="col-lg-3 col-md-6 col-12 mb-4">
+    <div class="card bg-gradient-primary text-white h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold fs-6 text-white text-opacity-75">Online Feeders</span>
+          <span class="badge bg-white bg-opacity-25 text-white rounded-pill"><i class="bx bx-wifi"></i></span>
+        </div>
+        <h2 class="card-title text-white mb-0 display-6 fw-bold" id="non-zero-count">--</h2>
+        <small class="text-white text-opacity-75 mt-1 d-block">System Operational</small>
       </div>
     </div>
   </div>
-  <!-- /Responsive Table -->
+
+  <div class="col-lg-3 col-md-6 col-12 mb-4">
+    <div class="card bg-danger text-white h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold fs-6 text-white text-opacity-75">Offline Feeders</span>
+          <span class="badge bg-white bg-opacity-25 text-white rounded-pill"><i class="bx bx-error-circle"></i></span>
+        </div>
+        <h2 class="card-title text-white mb-0 display-6 fw-bold" id="zero-count">--</h2>
+        <small class="text-white text-opacity-75 mt-1 d-block">Critical Attention Needed</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-12 mb-4">
+    <div class="card bg-warning text-white h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold fs-6 text-white text-opacity-75">Total Energy Import</span>
+          <span class="badge bg-white bg-opacity-25 text-white rounded-pill"><i class="bx bx-bolt-circle"></i></span>
+        </div>
+        <h2 class="card-title text-white mb-0 display-6 fw-bold" id="total-energy">--</h2>
+        <small class="text-white text-opacity-75 mt-1 d-block" id="current-month">This Month</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-12 mb-4">
+    <div class="card bg-secondary text-white h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold fs-6 text-white text-opacity-75">System Compliance</span>
+          <span class="badge bg-white bg-opacity-25 text-white rounded-pill"><i class="bx bx-check-shield"></i></span>
+        </div>
+        <h2 class="card-title text-white mb-0 display-6 fw-bold" id="feeder-compliance">--</h2>
+        <small class="text-white text-opacity-75 mt-1 d-block">Updates Real-time</small>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="row">
+  <!-- Interactive Chart -->
+  <div class="col-md-8 mb-4">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="card-title mb-0">Total Energy Consumption</h5>
+          <small class="text-muted">Previous 7 Days</small>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Last
+            7 Days</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="energyChart"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Recent Events / Alarms -->
+  <div class="col-md-4 mb-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">System Events</h5>
+        <small class="text-muted">Recent Alarms & Alerts</small>
+      </div>
+      <div class="card-body p-0">
+        <ul class="list-group list-group-flush" id="events-list">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <i class="bx bx-error text-danger me-2"></i> <span class="fw-semibold">Voltage Drop</span>
+              <div class="small text-muted ps-4">Feeder F-22 (Zaria Rd)</div>
+            </div>
+            <small class="text-muted">2m ago</small>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <i class="bx bx-power-off text-muted me-2"></i> <span class="fw-semibold">Signal Loss</span>
+              <div class="small text-muted ps-4">Feeder F-09 (Tudun Wada)</div>
+            </div>
+            <small class="text-muted">15m ago</small>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <i class="bx bx-info-circle text-info me-2"></i> <span class="fw-semibold">System Restart</span>
+              <div class="small text-muted ps-4">AMI Server</div>
+            </div>
+            <small class="text-muted">1h ago</small>
+          </li>
+        </ul>
+        <div class="p-3 text-center border-top">
+          <a href="#" class="btn btn-sm btn-outline-primary">View All Logs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Detailed Table -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Live Feeder Status</h5>
+        <div>
+          <button class="btn btn-sm btn-primary"><i class="bx bx-refresh"></i> Refresh</button>
+        </div>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table align-middle table-hover" id="data-table">
+          <thead class="table-light">
+            <tr>
+              <th>Feeder Name</th>
+              <th>Status</th>
+              <th>Last Seen</th>
+              <th>Active Power (kW)</th>
+              <th>Voltage (L1/L2/L3)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer border-top text-muted small">
+        <i class="bx bx-info-circle"></i> Data refreshes automatically every 60 seconds.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple placeholders for date
+  document.addEventListener('DOMContentLoaded', function () {
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const now = new Date();
+    document.getElementById('current-month').innerText = monthNames[now.getMonth()] + " " + now.getFullYear();
+  });
+
+  // Chart Placeholder (needs ApexCharts loaded in layout)
+  document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+      series: [{
+        name: 'Energy Import',
+        data: [31, 40, 28, 51, 42, 109, 100]
+      }],
+      chart: {
+        height: 300,
+        type: 'area',
+        toolbar: { show: false },
+        fontFamily: 'Inter, sans-serif'
+      },
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth' },
+      colors: ['#4F46E5'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          stops: [0, 90, 100]
+        }
+      },
+      xaxis: {
+        categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        labels: { style: { colors: '#6b7280' } }
+      },
+      yaxis: {
+        labels: { style: { colors: '#6b7280' } }
+      },
+      grid: { borderColor: '#f3f4f6' }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#energyChart"), options);
+    chart.render();
+  });
+</script>
 {% endblock %}

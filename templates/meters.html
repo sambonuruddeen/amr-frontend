@@ -5,50 +5,52 @@
 <div class="card mb-3">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Meters List</h5>
-    <a class="float-end" href="{{ 'new_meter' }}" title="New Meter"> <button class="btn btn-outline-primary">Add New Feeder <i class="bx bx-layout"></i></button></a>
+    <a class="float-end" href="{{ 'new_meter' }}" title="New Meter"> <button class="btn btn-outline-primary">Add New
+        Feeder <i class="bx bx-layout"></i></button></a>
   </div>
   <div class="card-body">
     <div class="table-responsive text-nowrap">
-        <table class="table table-hover table-stripped" id="table">
+      <table class="table table-hover" id="table">
         <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Feeder Name</th>
-                <th>Meter Number</th>
-                <th>Sim Number</th>
-                <th>Location</th>
-                <th>Band</th>
-                <th>Transformer Rating</th>
-                <th>Distribution Substation</th>
-                <th>Service Center</th>
-                <th>Business Unit</th>
-                <th>Region</th>
-            
-            </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Feeder Name</th>
+            <th>Meter Number</th>
+            <th>Sim Number</th>
+            <th>Location</th>
+            <th>Band</th>
+            <th>Transformer Rating</th>
+            <th>Distribution Substation</th>
+            <th>Service Center</th>
+            <th>Business Unit</th>
+            <th>Region</th>
+
+          </tr>
         </thead>
         <tbody>
           {% for feeder in feeders %}
-            <tr>
-              <td>
-                  <a href="#"><i class="bx bx-pen text-success"></i></a> | <a href="#"><i class="bx bx-trash text-danger"></i></a>
-              </td>
-              <td>{{ feeder.feeder_name }}</td>
-              <td>{{ feeder.meter_number }}</td>
-              <td>{{ feeder.sim_card_number }}</td>
-              <td>{{ feeder.location }}</td>
-              <td>{{ feeder.band }}</td>
-              <td>{{ feeder.transformer_rating }}</td>
-              <td>{{ feeder.distribution_substation }}</td>
-              <td>{{ feeder.service_center }}</td>
-              <td>{{ feeder.business_unit }}</td>
-              <td>{{ feeder.region }}</td>
-          
-            </tr>
-            {% endfor %}
-            
+          <tr>
+            <td>
+              <a href="#"><i class="bx bx-pen text-success"></i></a> | <a href="#"><i
+                  class="bx bx-trash text-danger"></i></a>
+            </td>
+            <td>{{ feeder.feeder_name }}</td>
+            <td>{{ feeder.meter_number }}</td>
+            <td>{{ feeder.sim_card_number }}</td>
+            <td>{{ feeder.location }}</td>
+            <td>{{ feeder.band }}</td>
+            <td>{{ feeder.transformer_rating }}</td>
+            <td>{{ feeder.distribution_substation }}</td>
+            <td>{{ feeder.service_center }}</td>
+            <td>{{ feeder.business_unit }}</td>
+            <td>{{ feeder.region }}</td>
+
+          </tr>
+          {% endfor %}
+
         </tbody>
 
-        </table>
+      </table>
     </div>
   </div>
 </div>
