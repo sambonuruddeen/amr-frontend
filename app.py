@@ -10,7 +10,7 @@ from datetime import datetime
 import io
 
 app = Flask(__name__, template_folder='templates')
-app.secret_key = 'your_very_secret_key' # It's important to set a secret key for flashing
+app.secret_key = '0dfb05d258ef9c2fcb635fdc4e5229071df71ebd1942230e39116c673e8698c3' # It's important to set a secret key for flashing
 
 data = []
 
@@ -20,9 +20,9 @@ logging.basicConfig(level=logging.INFO)
 # MySQL Database Settings
 DB_HOST = "localhost"
 DB_PORT = 3306
-DB_NAME = "jed_data"
-DB_USER = "root"
-DB_PASSWORD = ""
+DB_NAME = "jed_amr"
+DB_USER = "amr_user"
+DB_PASSWORD = "password"
 
 
 def get_db_connection():

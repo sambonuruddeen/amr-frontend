@@ -308,7 +308,8 @@
         // const serverTime = new Date().getTime();
         // Server is gmt while meter is local (GMT+1)
         const serverTime = new Date().getTime() + 3600000; // Add 1 hour to server time to match meter time
-        const itemTime = new Date(item.clock || item.timestamp).getTime(); // Fallback to timestamp if clock is missing
+        // const itemTime = new Date(item.clock || item.timestamp).getTime(); // Fallback to timestamp if clock is missing
+        const itemTime = new Date(item.timestamp).getTime(); // Fallback to timestamp if clock is missing
         const timeDifference = serverTime - itemTime;
 
         let timeAgo;
@@ -353,7 +354,7 @@
                       </td>
                       <td>${statusBadge}</td>
                        <td>
-                        <div>${item.clock || 'N/A'}</div>
+                        <div>${item.timestamp || 'N/A'}</div>
                         <small class="text-info">${timeAgo}</small>
                       </td>
                       <td class="fw-bold text-primary">${power}</td>
