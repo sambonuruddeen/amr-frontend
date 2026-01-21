@@ -502,4 +502,5 @@ def generate_bills():
 
 if __name__ == "__main__":
     threading.Thread(target=fetch_data, daemon=True).start()
-    app.run(host='0.0.0.0', port=8000)
+    # app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=7777)
