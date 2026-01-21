@@ -114,16 +114,33 @@
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Analytics</span>
           </li>
-          <li class="menu-item {% if request.endpoint == 'reports' %}active{% endif %}">
+          <li class="menu-item {% if request.endpoint == 'meter_readings' %}active{% endif %}">
             <a href="{{'/report'}}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
               <div data-i18n="Account Settings">Consumption Reports</div>
             </a>
           </li>
-          <li class="menu-item">
-            <a href="#" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-line-chart"></i>
-              <div data-i18n="Account Settings">Load Profile</div>
+
+          <!-- Billing & Revenue -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Revenue Management</span>
+          </li>
+          <li class="menu-item {% if request.endpoint == 'billing' %}active{% endif %}">
+            <a href="{{ url_for('billing') }}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-wallet"></i>
+              <div data-i18n="Billing">Billing Center</div>
+            </a>
+          </li>
+          <li class="menu-item {% if request.endpoint == 'tariffs' %}active{% endif %}">
+            <a href="{{ url_for('tariffs') }}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-purchase-tag-alt"></i>
+              <div data-i18n="Tariffs">Tariff Settings</div>
+            </a>
+          </li>
+          <li class="menu-item {% if request.endpoint == 'customers' %}active{% endif %}">
+            <a href="{{ url_for('customers') }}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user-pin"></i>
+              <div data-i18n="Customers">Customers</div>
             </a>
           </li>
 
@@ -136,12 +153,6 @@
             <a href="{{'/meters'}}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-chip"></i>
               <div data-i18n="Account Settings">Meters & SIMs</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="#" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-server"></i>
-              <div data-i18n="Account Settings">Transformers</div>
             </a>
           </li>
 
@@ -294,7 +305,9 @@
       let feederCompliance = 0;
 
       data.forEach(item => {
-        const serverTime = new Date().getTime();
+        // const serverTime = new Date().getTime();
+        // Server is gmt while meter is local (GMT+1)
+        const serverTime = new Date().getTime() + 3600000; // Add 1 hour to server time to match meter time
         const itemTime = new Date(item.clock || item.timestamp).getTime(); // Fallback to timestamp if clock is missing
         const timeDifference = serverTime - itemTime;
 
@@ -335,13 +348,13 @@
                       <td>
                          <div class="d-flex flex-column">
                            <span class="fw-bold text-dark">${item.feeder_name || 'N/A'}</span>
-                           <small class="text-muted">${item.meter_serial_number || ''}</small>
+                           <small class="text-info">${item.meter_serial_number || ''}</small>
                          </div>
                       </td>
                       <td>${statusBadge}</td>
                        <td>
                         <div>${item.clock || 'N/A'}</div>
-                        <small class="text-muted">${timeAgo}</small>
+                        <small class="text-info">${timeAgo}</small>
                       </td>
                       <td class="fw-bold text-primary">${power}</td>
                       <td><span class="badge bg-label-secondary">${voltage} V</span></td>

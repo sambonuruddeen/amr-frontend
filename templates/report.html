@@ -47,6 +47,15 @@
   </h5>
 
   <div class="card-body">
+
+    <!-- Analytics Chart -->
+    {% if report|length > 0 %}
+    <div class="mb-4">
+      <h6 class="text-muted">Consumption Trend</h6>
+      <div id="reportChart"></div>
+    </div>
+    {% endif %}
+
     <div class="table-responsive text-nowrap">
       <table class="table table-hover" id="table">
         <thead>
@@ -56,22 +65,7 @@
             <th>Business Unit</th>
             <th>Service Center</th>
             <th>Feeder Name</th>
-            <th>Meter Number</th>
-            <th>Sim Number</th>
-            <th>Location</th>
-            <th>Band</th>
-            <th>Transformer Rating</th>
-            <th>Distribution Substation</th>
-            <th>Service Center</th>
-            <th>Business Unit</th>
-            <th>Region</th>
-            <th>Feeder Clock</th>
-            <th>Active Energy Import</th>
-            <th>Active Energy Export</th>
-            <th>Reactive Energy Import</th>
-            <th>Reactive Energy Export</th>
-            <th>Power Factor</th>
-            <th>Timestamp</th>
+            <!-- ... -->
           </tr>
         </thead>
         <tbody>
@@ -79,6 +73,7 @@
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ row.region }}</td>
+            <!-- ... -->
             <td>{{ row.business_unit }}</td>
             <td>{{ row.service_center }}</td>
             <td>{{ row.feeder_name }}</td>
@@ -109,6 +104,56 @@
 
 </div>
 
+<!-- Chart Script -->
+{% if report|length > 0 %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Prepare data
+    const rawData = [
+      {% for row in report %}
+            {
+      time: "{{ row.timestamp }}",
+      value: {{ row.active_energy_import if row.active_energy_import else 0 }}
+            },
+    {% endfor %}
+    ];
 
+  // Sort by time just in case (though SQL does it)
+  // rawData.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+  const categories = rawData.map(item => item.time);
+  const dataSeries = rawData.map(item => item.value);
+
+  var options = {
+    series: [{
+      name: 'Active Energy (kWh)',
+      data: dataSeries
+    }],
+    chart: {
+      height: 350,
+      type: 'line',
+      zoom: { enabled: true }
+    },
+    dataLabels: { enabled: false },
+    stroke: { curve: 'smooth', width: 2 },
+    title: {
+      text: 'Energy Consumption Profile',
+      align: 'left'
+    },
+    grid: {
+      row: { colors: ['#f3f3f3', 'transparent'], opacity: 0.5 },
+    },
+    xaxis: {
+      categories: categories,
+      type: 'datetime',
+      labels: { datetimeFormatter: { year: 'yyyy', month: 'MMM \'yy', day: 'dd MMM', hour: 'HH:mm' } }
+    }
+  };
+
+  var chart = new ApexCharts(document.querySelector("#reportChart"), options);
+  chart.render();
+});
+</script>
+{% endif %}
 
 {% endblock %}

@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block title %}Tariff Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Create Tariff Form -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <h5 class="card-header">Set New Tariff</h5>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Tariff Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="e.g. Residential Band A 2026"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Applicable Band</label>
+                        <select class="form-select" name="band" required>
+                            <option value="">Select Band...</option>
+                            {% for band in bands %}
+                            <option value="{{ band }}">{{ band }}</option>
+                            {% endfor %}
+                            <option value="GENERAL">GENERAL (All Bands)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Rate (₦ / kWh)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₦</span>
+                            <input type="number" step="0.01" class="form-control" name="rate" placeholder="0.00"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Effective Date</label>
+                        <input type="date" class="form-control" name="effective_date" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Save Tariff Rate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tariff History List -->
+    <div class="col-md-8">
+        <div class="card">
+            <h5 class="card-header">Current Tariff Rates</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Band</th>
+                            <th>Rate / kWh</th>
+                            <th>Effective</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tariff in tariffs %}
+                        <tr>
+                            <td><strong>{{ tariff.name }}</strong></td>
+                            <td><span class="badge bg-label-info">{{ tariff.band }}</span></td>
+                            <td>₦ {{ tariff.rate_per_kwh }}</td>
+                            <td>{{ tariff.effective_date }}</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">No tariffs defined.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

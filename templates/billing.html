@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}Billing Center{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Generate Bills Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card bg-label-primary">
+            <div class="card-body">
+                <h5 class="card-title text-primary"><i class="bx bx-cog bx-spin"></i> Generate Bills</h5>
+                <p class="card-text">Calculate bills for all customers based on meter readings for a specific period.
+                </p>
+
+                <form action="{{ url_for('generate_bills') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="start_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="end_date" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Run Billing Engine</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Billing Stats (Placeholder) -->
+    <div class="col-md-8 mb-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <span class="d-block mb-1">Total Revenue (This Month)</span>
+                        <h3 class="card-title text-success mb-2">₦ --</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <span class="d-block mb-1">Bills Generated</span>
+                        <h3 class="card-title text-info mb-2">{{ bills|length }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bills Table -->
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Billing History</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover" id="bills-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Meter</th>
+                            <th>Period</th>
+                            <th>Consumption</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in bills %}
+                        <tr>
+                            <td>#{{ bill.id }}</td>
+                            <td>
+                                <div class="fw-bold">{{ bill.customer_name }}</div>
+                                <small class="text-muted">{{ bill.account_number }}</small>
+                            </td>
+                            <td>{{ bill.meter_serial_number }}</td>
+                            <td>{{ bill.billing_period_start }} to {{ bill.billing_period_end }}</td>
+                            <td>{{ bill.total_kwh }} kWh</td>
+                            <td class="fw-bold text-success">₦ {{ bill.total_amount }}</td>
+                            <td><span class="badge bg-label-info">{{ bill.status }}</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-icon btn-outline-secondary"><i
+                                        class="bx bx-download"></i></button>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">No bills generated yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

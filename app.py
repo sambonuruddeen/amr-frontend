@@ -319,7 +319,187 @@ def download_csv():
 #     return jsonify(readings)
 
 
+# --- BILLING & MANAGEMENT MODULES ---
+
+@app.route("/tariffs", methods=['GET', 'POST'])
+def tariffs():
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        band = request.form.get('band')
+        rate = request.form.get('rate')
+        effective_date = request.form.get('effective_date')
+
+        cur.execute('''
+            INSERT INTO tariffs (name, band, rate_per_kwh, effective_date)
+            VALUES (%s, %s, %s, %s)
+        ''', (name, band, rate, effective_date))
+        conn.commit()
+        flash("Tariff created successfully.", "success")
+        return redirect(url_for('tariffs'))
+
+    cur.execute("SELECT * FROM tariffs ORDER BY effective_date DESC")
+    tariffs_data = cur.fetchall()
+    
+    # Get distinct bands from feeder_details to populate dropdown
+    cur.execute("SELECT DISTINCT band FROM feeder_details WHERE band IS NOT NULL")
+    bands = [row['band'] for row in cur.fetchall()]
+    
+    cur.close()
+    conn.close()
+    return render_template('tariffs.html', tariffs=tariffs_data, bands=bands)
+
+@app.route("/customers", methods=['GET', 'POST'])
+def customers():
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        
+        if action == 'create':
+            name = request.form.get('name')
+            account_number = request.form.get('account_number')
+            email = request.form.get('email')
+            phone = request.form.get('phone')
+            address = request.form.get('address')
+            
+            try:
+                cur.execute('''
+                    INSERT INTO customers (name, account_number, email, phone, address)
+                    VALUES (%s, %s, %s, %s, %s)
+                ''', (name, account_number, email, phone, address))
+                conn.commit()
+                flash("Customer added successfully.", "success")
+            except mysql.connector.Error as err:
+                flash(f"Error: {err}", "danger")
+                
+        elif action == 'assign_meter':
+            customer_id = request.form.get('customer_id')
+            meter_number = request.form.get('meter_number')
+            
+            cur.execute('''
+                UPDATE feeder_details SET customer_id = %s WHERE meter_number = %s
+            ''', (customer_id, meter_number))
+            conn.commit()
+            flash(f"Meter {meter_number} assigned to customer.", "success")
+
+        return redirect(url_for('customers'))
+
+    # Fetch Customers
+    cur.execute("SELECT * FROM customers ORDER BY created_at DESC")
+    customers_data = cur.fetchall()
+
+    # Fetch Meters for assignment (optionally filter those without customers)
+    cur.execute("SELECT meter_number, feeder_name, customer_id FROM feeder_details")
+    meters = cur.fetchall()
+
+    cur.close()
+    conn.close()
+    return render_template('customers.html', customers=customers_data, meters=meters)
+
+@app.route("/billing", methods=['GET'])
+def billing():
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    # Fetch recent bills with customer and tariff info
+    cur.execute('''
+        SELECT b.*, c.name as customer_name, c.account_number, t.name as tariff_name
+        FROM bills b
+        JOIN customers c ON b.customer_id = c.id
+        LEFT JOIN tariffs t ON b.tariff_id = t.id
+        ORDER BY b.created_at DESC
+        LIMIT 50
+    ''')
+    bills = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    return render_template('billing.html', bills=bills)
+
+@app.route("/billing/generate", methods=['POST'])
+def generate_bills():
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    try:
+        # 1. Get all meters that are assigned to a customer
+        cur.execute('''
+            SELECT meter_number, customer_id, band 
+            FROM feeder_details 
+            WHERE customer_id IS NOT NULL
+        ''')
+        meters_to_bill = cur.fetchall()
+        
+        generated_count = 0
+        
+        for meter in meters_to_bill:
+            meter_id = meter['meter_number']
+            customer_id = meter['customer_id']
+            band = meter['band']
+            
+            # 2. Calculate Usage: Max Reading - Min Reading in the period
+            cur.execute('''
+                SELECT MIN(active_energy_import) as start_read, MAX(active_energy_import) as end_read
+                FROM meter_readings
+                WHERE meter_serial_number = %s AND timestamp BETWEEN %s AND %s
+            ''', (meter_id, start_date, end_date))
+            readings = cur.fetchone()
+            
+            if not readings or readings['start_read'] is None or readings['end_read'] is None:
+                continue # Skip if no data
+                
+            start_read = float(readings['start_read'])
+            end_read = float(readings['end_read'])
+            usage = end_read - start_read
+            
+            if usage < 0: usage = 0 # Should not happen usually
+            
+            # 3. Find Tariff
+            # Logic: Find most recent tariff for this Band or General
+            cur.execute('''
+                SELECT * FROM tariffs 
+                WHERE (band = %s OR band = 'GENERAL') AND effective_date <= %s
+                ORDER BY effective_date DESC LIMIT 1
+            ''', (band, end_date))
+            tariff = cur.fetchone()
+            
+            tariff_id = tariff['id'] if tariff else None
+            rate = float(tariff['rate_per_kwh']) if tariff else 0.0
+            
+            # 4. Calculate Amount
+            amount = usage * rate
+            
+            # 5. Insert Bill
+            cur.execute('''
+                INSERT INTO bills (meter_serial_number, customer_id, tariff_id, billing_period_start, billing_period_end, total_kwh, tariff_rate_applied, total_amount)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (meter_id, customer_id, tariff_id, start_date, end_date, usage, rate, amount))
+            generated_count += 1
+            
+        conn.commit()
+        if generated_count > 0:
+            flash(f"Successfully generated {generated_count} bills.", "success")
+        else:
+            flash("No bills generated. Check if meters have readings and assigned customers.", "warning")
+            
+    except Exception as e:
+        conn.rollback()
+        logging.error(f"Billing Error: {e}")
+        flash(f"Error generating bills: {e}", "danger")
+        
+    finally:
+        cur.close()
+        conn.close()
+        
+    return redirect(url_for('billing'))
+
 if __name__ == "__main__":
-#     #app.run(debug=True)
     threading.Thread(target=fetch_data, daemon=True).start()
     app.run(host='0.0.0.0', port=8000)
